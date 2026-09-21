@@ -1,0 +1,332 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ══════════════════════════════════════════════════════════════════
+   THE NIGHTSHADE DEPTHS — style guide v2.0
+   Paranormal / End Credits — zie STYLEGUIDE.md
+   ══════════════════════════════════════════════════════════════════ */
+:root {
+  /* Kleuren */
+  --void: #20002a; /* Nightshade Void — achtergrond */
+  --abyss: #0b1d2e; /* Abyssal Blue — diepte en panelen */
+  --abyss-soft: rgba(11, 29, 46, 0.5);
+  --cream: #f0e6d2; /* Bone Cream — tekst en titels */
+  --cream-dim: rgba(240, 230, 210, 0.55);
+  --ember: #b5723a; /* Ember Copper — accent en hover */
+  --ember-dim: rgba(181, 114, 58, 0.35);
+  --hairline: rgba(240, 230, 210, 0.12);
+
+  /* Gloed */
+  --glow-cream: 0 0 24px rgba(240, 230, 210, 0.16);
+  --glow-abyss: 0 0 80px rgba(11, 29, 46, 0.9);
+
+  /* Tempo van de motion (zie STYLEGUIDE.md → Motion) */
+  --fade-slow: 1.4s;
+  --ease-haunt: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+html {
+  /* relative: Framer Motion meet scrollposities ten opzichte van dit element */
+  position: relative;
+  background: var(--void);
+  color-scheme: dark;
+}
+
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-weight: 300; /* Hahmlet ademt; 300 is de leesstand */
+  line-height: 1.7;
+}
+
+/* Anton heeft één gewicht: laat de browser geen nep-vet maken */
+.font-impact {
+  font-synthesis: none;
+  font-weight: 400;
+}
+
+::selection {
+  background: var(--ember);
+  color: var(--void);
+}
+
+:focus-visible {
+  outline: 1px solid var(--ember);
+  outline-offset: 5px;
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   1. FILM GRAIN — 16mm-korrel over de hele site (app/layout.tsx)
+   Regel uit de gids: statisch, 5–8% opacity, mix-blend-mode overlay, animeert NIET.
+   ══════════════════════════════════════════════════════════════════ */
+.film-grain {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  pointer-events: none;
+  opacity: 0.05;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Donkere randen, als een oude projector */
+.vignette {
+  position: fixed;
+  inset: 0;
+  z-index: 79;
+  pointer-events: none;
+  background: radial-gradient(120% 90% at 50% 45%, transparent 55%, rgba(0, 0, 0, 0.55) 100%);
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   SUÈDE — de achtergrond voelt als fluweel in plaats van vlakke kleur.
+   Laag 1 (op body): zachte lichtvlekken, alsof het licht schuin over de stof strijkt.
+   Laag 2 (.suede): de nerf — belichte ruis geeft de fluweelstructuur. Beide statisch.
+   ══════════════════════════════════════════════════════════════════ */
+body {
+  background-color: var(--void);
+  background-image:
+    radial-gradient(75% 55% at 18% 6%, rgba(66, 30, 84, 0.85), transparent 60%),
+    radial-gradient(62% 48% at 88% 24%, rgba(11, 29, 46, 0.8), transparent 62%),
+    radial-gradient(48% 38% at 74% 70%, rgba(74, 36, 92, 0.55), transparent 66%),
+    radial-gradient(90% 60% at 45% 100%, rgba(11, 29, 46, 0.65), transparent 60%);
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+}
+
+/* De nerf: belichte ruis geeft de zachte, richtingsgevoelige structuur van suède */
+.suede {
+  position: fixed;
+  inset: 0;
+  z-index: 78;
+  pointer-events: none;
+  opacity: 0.5;
+  mix-blend-mode: soft-light;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='560' height='560'%3E%3Cfilter id='s'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.6' numOctaves='4' seed='7' stitchTiles='stitch'/%3E%3CfeDiffuseLighting lighting-color='%23c4a9d8' surfaceScale='2.4'%3E%3CfeDistantLight azimuth='115' elevation='56'/%3E%3C/feDiffuseLighting%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23s)'/%3E%3C/svg%3E");
+  background-size: 560px 560px;
+}
+
+/* Heel fijne scanlines, alleen op beeld (hero) */
+.scanlines::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(to bottom, rgba(0, 0, 0, 0.18) 0 1px, transparent 1px 3px);
+  mix-blend-mode: multiply;
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   2. FLICKER — één moment per pagina: de hero-titel bij het laden
+   Regel uit de gids: alleen opacity, geen positie-shift, geen RGB-split,
+   nooit op knoppen of kaarten.
+   ══════════════════════════════════════════════════════════════════ */
+.flicker-in {
+  animation: flickerIn 2.4s ease-out both;
+}
+@keyframes flickerIn {
+  0% { opacity: 0; }
+  8% { opacity: 0.9; }
+  12% { opacity: 0.1; }
+  18% { opacity: 1; }
+  24% { opacity: 0.3; }
+  30% { opacity: 1; }
+  100% { opacity: 1; }
+}
+
+/* Pikzwarte opstart: een doek dat traag optrekt (hero) */
+.blackout {
+  animation: blackout 2.6s var(--ease-haunt) 0.2s both;
+}
+@keyframes blackout {
+  from { opacity: 1; }
+  to { opacity: 0; visibility: hidden; }
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   3. SLOW FADES — content onthult zich traag (components/Reveal.tsx)
+   Regel uit de gids: opacity 0→1 met translateY(16–20px), 1,2–1,5 s,
+   per sectieblok — niet elk kaartje apart.
+   ══════════════════════════════════════════════════════════════════ */
+.js .reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  transition:
+    opacity var(--fade-slow) var(--ease-haunt) var(--reveal-delay, 0s),
+    transform var(--fade-slow) var(--ease-haunt) var(--reveal-delay, 0s);
+}
+.js .reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* Tekst die opdoemt (hero-intro, slotscherm) */
+.emerge {
+  animation: emerge 1.6s var(--ease-haunt) both;
+}
+@keyframes emerge {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: none; }
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   4. DE OPENBARING — beeld is donker en zwart-wit tot je het aanraakt
+   ══════════════════════════════════════════════════════════════════ */
+.haunted-media {
+  filter: grayscale(1) brightness(0.4) contrast(1.15);
+  transition:
+    filter 1.4s var(--ease-haunt),
+    transform 1.8s var(--ease-haunt);
+}
+.group:hover .haunted-media,
+.group:focus-visible .haunted-media,
+.group:focus-within .haunted-media {
+  filter: grayscale(0) brightness(0.95) contrast(1);
+  transform: scale(1.04);
+}
+/* Touchscreens kunnen niet hoveren: toon het beeld half onthuld */
+@media (hover: none) {
+  .haunted-media {
+    filter: grayscale(0.55) brightness(0.65) contrast(1.05);
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   Venster (projecten, foto's en video's)
+   ══════════════════════════════════════════════════════════════════ */
+#project-dialog {
+  width: 100%;
+  max-width: none;
+  height: 100dvh;
+  max-height: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  overflow: hidden;
+}
+#dialog-scroll {
+  height: 100%;
+  max-height: 100dvh;
+}
+@media (min-width: 640px) {
+  #project-dialog {
+    width: min(72rem, 94vw);
+    height: fit-content;
+    max-height: 92vh;
+    margin: auto;
+  }
+  #dialog-scroll {
+    height: auto;
+    max-height: 92vh;
+  }
+}
+dialog::backdrop {
+  background: rgba(10, 0, 14, 0.92);
+  backdrop-filter: blur(6px) grayscale(1);
+}
+dialog[open] {
+  animation: dialogIn 0.9s var(--ease-haunt);
+}
+@keyframes dialogIn {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: none; }
+}
+
+.no-scrollbar {
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   Dossierkaart (portret, draait om naar de rugfoto)
+   ══════════════════════════════════════════════════════════════════ */
+.card-scene {
+  perspective: 2000px;
+}
+.card-inner {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+  transition: transform 1.4s var(--ease-haunt);
+}
+.trading-card[aria-pressed="true"] .card-inner {
+  transform: rotateY(180deg);
+}
+.card-face {
+  position: absolute;
+  inset: 0;
+  display: block;
+  overflow: hidden;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+.card-back {
+  transform: rotateY(180deg);
+}
+
+/* End Credits: tekst doemt onderin op uit het donker en dooft bovenin weer uit */
+.credits-mask {
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 24%, #000 70%, transparent 100%);
+  mask-image: linear-gradient(to bottom, transparent 0%, #000 24%, #000 70%, transparent 100%);
+}
+
+/* Psychologisch profiel: dunne lijnen die zich traag vullen */
+.meter-fill {
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 2s var(--ease-haunt) var(--delay, 0.3s);
+}
+.is-visible .meter-fill,
+html:not(.js) .meter-fill {
+  transform: scaleX(var(--value));
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   'Minder beweging': geen flikkering, direct zichtbaar
+   ══════════════════════════════════════════════════════════════════ */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .flicker-in,
+  .emerge,
+  dialog[open] {
+    animation: none !important;
+  }
+  .flicker-in {
+    opacity: 1;
+  }
+  .blackout {
+    animation: none !important;
+    display: none;
+  }
+  .js .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  .haunted-media,
+  .card-inner,
+  .meter-fill {
+    transition: none !important;
+  }
+}
+
+
+/* Suede / Velvet Texture */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  opacity: 0.08;
+  mix-blend-mode: soft-light;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+}
+
+
