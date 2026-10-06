@@ -68,7 +68,14 @@ lib/
   availability.ts          → voorbeeld-bezette data voor de kalender
 docs/
   Venhuistijl.md, project-brief.md → oorspronkelijke briefing
+mark-portfolio/           → apart persoonlijk portfolio-project
 ```
+
+De map `mark-portfolio/` is een zelfstandig project met een eigen `package.json`.
+De persoonlijke Next.js-portfolio staat daar; de oudere losse HTML-versie staat
+in `mark-portfolio/legacy-static/`, met de bijbehorende `assets/`. Ruwe portfolio-
+bestanden en het aangeleverde ZIP-archief staan in `mark-portfolio/source-material/`.
+Start de HTML-versie vanuit `mark-portfolio/` met `npm run static`.
 
 Er is bewust **geen database**: de "boekingsagenda" op de Apartments-pagina
 toont een handmatig bij te werken lijst met bezette periodes

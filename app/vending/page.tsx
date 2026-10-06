@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
-import type { SVGProps } from "react";
 import Image from "next/image";
-import Link from "next/link";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import Logo from "@/components/Logo";
 import ContactForm from "@/components/ContactForm";
 import FloatingContactButtons from "@/components/FloatingContactButtons";
+import FloatingProducts from "@/components/FloatingProducts";
+import HeroScrollSection from "@/components/HeroScrollSection";
+import ScrollRule from "@/components/ScrollRule";
+import { EuroIcon, ServiceIcon, ClipboardIcon, KeyIcon } from "@/components/icons";
 import { SITE, VENDING, whatsappHref } from "@/lib/constants";
 
 export const metadata: Metadata = {
@@ -40,6 +41,9 @@ const usps = [
   },
 ];
 
+// Slight vertical offsets so the 2x2 grid reads as editorial rhythm.
+const CARD_OFFSETS = ["", "sm:mt-[18px]", "sm:mt-[10px]", ""];
+
 const machines = [
   {
     name: "Snoep- & snackautomaat",
@@ -64,6 +68,38 @@ const machines = [
     description:
       "Vers gezette koffie, thee en chocomel voor bij het bureau of in de kantine.",
     tags: ["Koffie", "Thee", "Chocomel"],
+  },
+];
+
+// Het werkelijke assortiment, zoals het in onze automaten zit.
+const assortiment = [
+  { groep: "Chips & hartig", items: "Lay's, Kanters, Duyvis, Wasa" },
+  { groep: "Koek & chocolade", items: "KitKat, Twix, Mars, Snickers, Bounty, Prince, Kinder Bueno" },
+  { groep: "Snoep", items: "Haribo" },
+  { groep: "Frisdrank", items: "Coca-Cola, Fanta, Sprite, Fernandes" },
+  { groep: "IJsthee & sappen", items: "Lipton Ice Tea, Dubbel Frisss, Taksi, Fristi" },
+  { groep: "Energy", items: "Red Bull" },
+];
+
+// Foto's van onze eigen automaten op locatie.
+const praktijk = [
+  {
+    src: "/images/vending/bijvullen.jpg",
+    alt: "Open vending-automaat tijdens het bijvullen van de schappen",
+    titel: "Wij vullen bij",
+    tekst: "Volgens een vast schema, en extra bij drukte.",
+  },
+  {
+    src: "/images/vending/touchscreen.jpg",
+    alt: "Touchscreen van de automaat met de baanconfiguratie per product",
+    titel: "Techniek & beheer",
+    tekst: "Prijzen en voorraad stellen wij per baan in.",
+  },
+  {
+    src: "/images/vending/machine-gevuld.jpg",
+    alt: "Volledig gevulde automaat met snacks en koude dranken",
+    titel: "Altijd gevuld",
+    tekst: "Van chips tot koude fris, dag en nacht beschikbaar.",
   },
 ];
 
@@ -118,95 +154,8 @@ export default function VendingPage() {
     <>
       <Header active="vending" />
 
-      {/* HERO */}
-      <section className="relative isolate min-h-[700px] overflow-hidden bg-mv-green-deep font-manrope text-white sm:min-h-[720px] lg:h-[calc(100vh-64px)] lg:min-h-[720px] lg:max-h-[920px]">
-        <Image
-          src="/images/hero-section.png"
-          alt="Premium Marjani-snackautomaat met warme LED-verlichting in een moderne kantoorlobby"
-          fill
-          priority
-          sizes="100vw"
-          className="object-[68%_65%] object-cover sm:object-[60%_65%] lg:object-[center_70%]"
-        />
-
-        {/* Layer 1 — subtle overall tint so the photo still reads as photographic */}
-        <div className="absolute inset-0 bg-mv-green-deep/20" />
-        {/* Layer 2 — left-to-right gradient; darkest where the text sits, clear over the machine */}
-        <div
-          className="absolute inset-0 hidden lg:block"
-          style={{
-            background:
-              "linear-gradient(90deg, rgba(3,30,20,0.94) 0%, rgba(4,39,25,0.84) 38%, rgba(4,34,24,0.48) 63%, rgba(4,25,18,0.16) 100%)",
-          }}
-        />
-        {/* Stronger, flatter left overlay below desktop where the crop shifts and text needs more contrast */}
-        <div
-          className="absolute inset-0 lg:hidden"
-          style={{
-            background:
-              "linear-gradient(90deg, rgba(3,30,20,0.96) 0%, rgba(3,30,20,0.82) 55%, rgba(3,30,20,0.4) 100%)",
-          }}
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-mv-green-deep/45 via-transparent to-transparent" />
-
-        <div className="relative mx-auto max-w-[1280px] px-6 pb-16 pt-[100px] sm:px-8 sm:pt-[110px] lg:pt-[120px]">
-          <div className="max-w-[620px]">
-            <span className="animate-fade-up inline-flex items-center rounded-full border border-mv-gold/35 bg-mv-green-secondary/70 px-3.5 py-2 text-[13px] font-bold uppercase tracking-[0.16em] text-mv-gold-bright">
-              Marjani Vending
-            </span>
-
-            <h1 className="animate-fade-up mt-[22px] text-[42px] font-extrabold leading-[1.03] tracking-[-0.03em] text-white [animation-delay:80ms] sm:text-[50px] lg:text-[64px] lg:leading-[1.0] lg:tracking-[-0.035em]">
-              Zorgeloze snack- &amp; drinkvoorziening{" "}
-              <span className="block text-mv-gold-bright">voor uw bedrijf</span>
-            </h1>
-
-            <p className="animate-fade-up mt-6 max-w-[590px] text-[17px] leading-[1.65] text-mv-cream/85 [animation-delay:160ms] sm:text-[18px]">
-              Fully serviced, multi-product automaten voor kantoren, scholen
-              en sportkantines. Wij plaatsen, vullen en onderhouden &mdash; u
-              hoeft nergens naar om te kijken.
-            </p>
-
-            <div className="animate-fade-up mt-[30px] flex flex-wrap items-center gap-3.5 [animation-delay:240ms]">
-              <Link
-                href="#contact"
-                className="group inline-flex h-[50px] items-center gap-2 rounded-xl bg-mv-gold-bright px-6 text-[15px] font-extrabold uppercase tracking-wide text-mv-green-deep transition-all duration-200 ease-out hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(232,190,63,0.22)] focus:outline-none focus-visible:ring-2 focus-visible:ring-mv-gold-bright focus-visible:ring-offset-2 focus-visible:ring-offset-mv-green-deep"
-              >
-                Vraag offerte aan
-                <svg
-                  viewBox="0 0 20 20"
-                  fill="none"
-                  className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5"
-                >
-                  <circle cx="10" cy="10" r="9" stroke="currentColor" strokeWidth="1.4" />
-                  <path
-                    d="M7.5 10h5M10 7.5 12.5 10 10 12.5"
-                    stroke="currentColor"
-                    strokeWidth="1.4"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-              </Link>
-              <a
-                href={whatsappHref(VENDING.whatsappMessage)}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group inline-flex h-[50px] items-center gap-2 rounded-xl border border-white/20 bg-white/[0.06] px-6 text-[15px] font-bold text-white transition-all duration-200 ease-out hover:-translate-y-0.5 hover:bg-white/[0.12] focus:outline-none focus-visible:ring-2 focus-visible:ring-white/50 focus-visible:ring-offset-2 focus-visible:ring-offset-mv-green-deep"
-              >
-                <svg viewBox="0 0 32 32" className="h-[18px] w-[18px]" fill="currentColor">
-                  <path d="M16.02 4C9.4 4 4 9.4 4 16.02c0 2.3.62 4.44 1.72 6.28L4 28l5.86-1.66a11.9 11.9 0 006.16 1.68C22.66 28.02 28 22.62 28 16s-5.34-12-11.98-12zm.02 21.7c-2 0-3.87-.55-5.47-1.5l-.39-.23-3.68 1.04 1.06-3.6-.25-.4a9.6 9.6 0 01-1.5-5.19c0-5.33 4.35-9.68 9.7-9.68 5.35 0 9.7 4.35 9.7 9.68 0 5.34-4.35 9.88-9.17 9.88z" />
-                </svg>
-                Direct WhatsAppen
-              </a>
-            </div>
-
-            <div className="animate-fade-up mt-7 flex items-center gap-3 text-[13px] text-mv-cream/70 [animation-delay:320ms]">
-              <Logo variant="mark" className="h-[30px] w-[30px]" />
-              <span>Onderdeel van Marjani Global Services &middot; Wateringen</span>
-            </div>
-          </div>
-        </div>
-      </section>
+      {/* HERO — scroll-driven cinematic sequence, see components/HeroScrollSection.tsx */}
+      <HeroScrollSection />
 
       {/* USPs */}
       <section className="bg-off-white">
@@ -226,25 +175,54 @@ export default function VendingPage() {
       </section>
 
       {/* WAT KRIJGT U */}
-      <section id="automaten" className="bg-white">
-        <div className="section">
-          <span className="eyebrow">Wat krijgt u</span>
-          <h2 className="max-w-2xl text-3xl font-extrabold text-service-green-dark sm:text-4xl">
-            Automaten op maat van uw locatie
+      <section
+        id="automaten"
+        className="relative overflow-hidden bg-gradient-to-b from-[#FAF9F3] via-[#F6F4EB] to-[#F2F5F1]"
+      >
+        {/* Barely-there architectural light, keeps the cream from going flat. */}
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_18%_8%,rgba(232,197,71,0.05),transparent_55%)]"
+        />
+        <FloatingProducts />
+
+        <div className="section relative z-10">
+          {/* Intro */}
+          <div className="flex items-center gap-3">
+            <span aria-hidden="true" className="h-px w-8 bg-vending-yellow" />
+            <span className="font-heading text-[11px] font-bold uppercase tracking-[0.26em] text-service-green/70">
+              Wat krijgt u
+            </span>
+          </div>
+
+          <h2 className="mt-5 max-w-3xl text-[34px] font-extrabold leading-[1.06] tracking-[-0.02em] text-service-green-dark sm:text-[44px] lg:text-[52px]">
+            Automaten op maat van uw
+            <br className="hidden sm:block" /> locatie
           </h2>
-          <p className="mt-4 max-w-2xl text-service-green-dark/70">
+
+          <p className="mt-5 max-w-[620px] text-service-green-dark/70">
             Van pure snackautomaten tot volledige combi-oplossingen &mdash; we
             stellen samen vast wat het beste past bij het aantal medewerkers
             en de ruimte die u heeft.
           </p>
 
-          <div className="mt-10 grid gap-6 sm:grid-cols-2">
-            {machines.map((m) => (
+          {/* Editorial rule closing the intro */}
+          <div aria-hidden="true" className="mt-10 flex items-center gap-3">
+            <span className="h-px w-14 bg-vending-yellow" />
+            <span className="h-px flex-1 bg-service-green/10" />
+          </div>
+
+          {/* Cards */}
+          <div className="mt-12 grid gap-6 sm:grid-cols-2">
+            {machines.map((m, i) => (
               <div
                 key={m.name}
-                className="card flex flex-col gap-3 border-service-green/10"
+                className={`group relative flex flex-col gap-3 rounded-[18px] border border-[rgba(6,55,34,0.08)] bg-white p-6 shadow-[0_1px_2px_rgba(6,55,34,0.04),0_10px_28px_-20px_rgba(6,55,34,0.25)] transition-[transform,border-color,box-shadow] duration-300 ease-out hover:-translate-y-[3px] hover:border-[rgba(6,55,34,0.16)] hover:shadow-[0_2px_4px_rgba(6,55,34,0.05),0_16px_34px_-20px_rgba(6,55,34,0.3)] ${CARD_OFFSETS[i] ?? ""}`}
               >
-                <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-service-green/10">
+                <span className="font-heading text-[11px] font-bold tracking-[0.22em] text-service-green/35 transition-colors duration-300 group-hover:text-vending-yellow-dark">
+                  {String(i + 1).padStart(2, "0")}
+                </span>
+                <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-service-green/[0.07] transition-colors duration-300 group-hover:bg-vending-yellow/20">
                   <svg viewBox="0 0 24 24" className="h-7 w-7 text-service-green" fill="none">
                     <rect x="4" y="3" width="16" height="18" rx="2" stroke="currentColor" strokeWidth="1.6" />
                     <path d="M8 8h3M13 8h3M8 12h3M13 12h3" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
@@ -270,18 +248,81 @@ export default function VendingPage() {
               </div>
             ))}
           </div>
+
+          {/* Hand-over to the next section */}
+          <div className="mt-16 sm:mt-20">
+            <ScrollRule from="01" to="02" />
+          </div>
         </div>
       </section>
 
-      {/* ZO WERKT HET */}
-      <section className="bg-service-green/5">
-        <div className="section">
-          <span className="eyebrow">Zo werkt het</span>
-          <h2 className="max-w-2xl text-3xl font-extrabold text-service-green-dark sm:text-4xl">
+      {/* HET ASSORTIMENT — echte foto van onze eigen automaat */}
+      <section id="assortiment" className="bg-service-green/5">
+        <div className="section grid items-center gap-12 lg:grid-cols-[1fr_0.85fr] lg:gap-20">
+          <div>
+            <div className="flex items-center gap-3">
+              <span aria-hidden="true" className="h-px w-8 bg-vending-yellow" />
+              <span className="font-heading text-[11px] font-bold uppercase tracking-[0.26em] text-service-green/70">
+                Het assortiment
+              </span>
+            </div>
+
+            <h2 className="mt-5 text-[34px] font-extrabold leading-[1.06] tracking-[-0.02em] text-service-green-dark sm:text-[44px] lg:text-[52px]">
+              Wat er in de automaat gaat
+            </h2>
+
+            <p className="mt-5 max-w-[560px] text-service-green-dark/70">
+              Bekende merken waar uw mensen echt naar grijpen. Wij stemmen de
+              vulling af op uw locatie en passen die aan op wat er goed loopt
+              &mdash; u hoeft zelf niets te bestellen of bij te houden.
+            </p>
+
+            <dl className="mt-10 grid gap-x-10 gap-y-6 sm:grid-cols-2">
+              {assortiment.map((a) => (
+                <div key={a.groep}>
+                  <dt className="font-heading text-[11px] font-bold uppercase tracking-[0.18em] text-vending-yellow-dark">
+                    {a.groep}
+                  </dt>
+                  <dd className="mt-1.5 text-sm leading-relaxed text-service-green-dark/75">
+                    {a.items}
+                  </dd>
+                </div>
+              ))}
+            </dl>
+          </div>
+
+          <figure className="relative mx-auto w-full max-w-[460px]">
+            <div className="relative aspect-[9/16] overflow-hidden rounded-[20px] border border-[rgba(6,55,34,0.08)] bg-white shadow-[0_24px_60px_-32px_rgba(6,55,34,0.45)]">
+              <Image
+                src="/images/vending/assortiment.jpg"
+                alt="Volledig gevulde Marjani-automaat met chips, chocolade, frisdrank en ijsthee"
+                fill
+                sizes="(max-width: 1024px) 90vw, 460px"
+                className="object-cover"
+              />
+            </div>
+            <figcaption className="mt-4 text-center text-xs text-service-green-dark/55">
+              Een van onze automaten, volledig gevuld opgeleverd.
+            </figcaption>
+          </figure>
+        </div>
+      </section>
+
+      {/* ZO WERKT HET — continues out of the section above, no hard break */}
+      <section id="service" className="bg-white">
+        <div className="section pt-12 sm:pt-14">
+          <div className="flex items-center gap-3">
+            <span aria-hidden="true" className="h-px w-8 bg-vending-yellow" />
+            <span className="font-heading text-[11px] font-bold uppercase tracking-[0.26em] text-service-green/70">
+              Zo werkt het
+            </span>
+          </div>
+
+          <h2 className="mt-5 max-w-3xl text-[34px] font-extrabold leading-[1.06] tracking-[-0.02em] text-service-green-dark sm:text-[44px] lg:text-[52px]">
             Van aanvraag tot dagelijks gebruik
           </h2>
 
-          <div className="mt-10 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="mt-12 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
             {steps.map((s) => (
               <div key={s.step} className="relative">
                 <span className="font-heading text-5xl font-black text-service-green/15">
@@ -294,6 +335,31 @@ export default function VendingPage() {
                   {s.description}
                 </p>
               </div>
+            ))}
+          </div>
+
+          {/* In de praktijk — eigen foto's van de service */}
+          <div className="mt-16 grid gap-6 sm:grid-cols-3">
+            {praktijk.map((p) => (
+              <figure key={p.src}>
+                <div className="relative aspect-[4/5] overflow-hidden rounded-[18px] border border-[rgba(6,55,34,0.08)] bg-service-green/5 shadow-[0_18px_40px_-28px_rgba(6,55,34,0.4)]">
+                  <Image
+                    src={p.src}
+                    alt={p.alt}
+                    fill
+                    sizes="(max-width: 640px) 90vw, 30vw"
+                    className="object-cover"
+                  />
+                </div>
+                <figcaption className="mt-4">
+                  <span className="font-heading text-sm font-bold text-service-green-dark">
+                    {p.titel}
+                  </span>
+                  <span className="mt-1 block text-sm leading-relaxed text-service-green-dark/65">
+                    {p.tekst}
+                  </span>
+                </figcaption>
+              </figure>
             ))}
           </div>
         </div>
@@ -320,6 +386,47 @@ export default function VendingPage() {
                 </p>
               </details>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* PERSOONLIJK — wie er achter de automaat staat */}
+      <section className="bg-off-white">
+        <div className="section grid items-center gap-12 lg:grid-cols-[0.8fr_1fr] lg:gap-16">
+          <figure className="relative mx-auto w-full max-w-[420px]">
+            <div className="relative aspect-[3/4] overflow-hidden rounded-[20px] border border-[rgba(6,55,34,0.08)] bg-white shadow-[0_24px_60px_-32px_rgba(6,55,34,0.45)]">
+              <Image
+                src="/images/vending/persoonlijk.jpg"
+                alt="Marjani Vending bij een geplaatste automaat op locatie"
+                fill
+                sizes="(max-width: 1024px) 90vw, 420px"
+                className="object-cover object-[50%_35%]"
+              />
+            </div>
+          </figure>
+
+          <div>
+            <div className="flex items-center gap-3">
+              <span aria-hidden="true" className="h-px w-8 bg-vending-yellow" />
+              <span className="font-heading text-[11px] font-bold uppercase tracking-[0.26em] text-service-green/70">
+                Persoonlijk
+              </span>
+            </div>
+
+            <h2 className="mt-5 text-[34px] font-extrabold leading-[1.06] tracking-[-0.02em] text-service-green-dark sm:text-[44px] lg:text-[52px]">
+              Geen callcenter, maar een vast gezicht
+            </h2>
+
+            <p className="mt-5 max-w-[560px] text-service-green-dark/70">
+              Wij plaatsen, vullen en onderhouden de automaten zelf, vanuit
+              Wateringen. U heeft daardoor altijd met dezelfde mensen te maken
+              &mdash; en bij een storing of vraag belt of appt u ons gewoon
+              rechtstreeks.
+            </p>
+
+            <p className="mt-6 font-heading text-sm font-bold text-service-green-dark">
+              Marjani Vending &middot; onderdeel van Marjani Global Services
+            </p>
           </div>
         </div>
       </section>
@@ -371,6 +478,16 @@ export default function VendingPage() {
                 {SITE.email}
               </a>
             </div>
+
+            <div className="relative mt-10 hidden aspect-[5/4] w-full max-w-sm overflow-hidden rounded-[18px] ring-1 ring-off-white/15 lg:block">
+              <Image
+                src="/images/vending/machine-op-locatie.jpg"
+                alt="Geplaatste Marjani-automaat bij een klant op locatie"
+                fill
+                sizes="384px"
+                className="object-cover object-top"
+              />
+            </div>
           </div>
 
           <div className="rounded-2xl bg-off-white p-1">
@@ -382,50 +499,5 @@ export default function VendingPage() {
       <Footer active="vending" />
       <FloatingContactButtons whatsappMessage={VENDING.whatsappMessage} />
     </>
-  );
-}
-
-function EuroIcon(props: SVGProps<SVGSVGElement>) {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" {...props}>
-      <path
-        d="M17 8a6 6 0 1 0 0 8M4 10h9M4 14h7"
-        stroke="currentColor"
-        strokeWidth="1.8"
-        strokeLinecap="round"
-      />
-    </svg>
-  );
-}
-
-function ServiceIcon(props: SVGProps<SVGSVGElement>) {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" {...props}>
-      <path
-        d="M12 3v3M12 18v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M3 12h3M18 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"
-        stroke="currentColor"
-        strokeWidth="1.8"
-        strokeLinecap="round"
-      />
-      <circle cx="12" cy="12" r="4" stroke="currentColor" strokeWidth="1.8" />
-    </svg>
-  );
-}
-
-function ClipboardIcon(props: SVGProps<SVGSVGElement>) {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" {...props}>
-      <rect x="6" y="4" width="12" height="17" rx="2" stroke="currentColor" strokeWidth="1.8" />
-      <path d="M9 4V3a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v1M9 11h6M9 15h6" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
-    </svg>
-  );
-}
-
-function KeyIcon(props: SVGProps<SVGSVGElement>) {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" {...props}>
-      <circle cx="8" cy="15" r="4" stroke="currentColor" strokeWidth="1.8" />
-      <path d="M11 12 19 4M16 5l2 2M19 4l1.5 1.5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
-    </svg>
   );
 }

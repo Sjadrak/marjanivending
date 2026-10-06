@@ -4,6 +4,9 @@ import { useState, FormEvent } from "react";
 
 type Status = "idle" | "loading" | "success" | "error";
 
+const inputClass =
+  "min-h-12 rounded-xl border border-mv-green/15 bg-mv-cream/60 px-4 py-2.5 text-base font-normal text-mv-green placeholder:text-mv-green/40 transition-colors focus:border-mv-gold focus:bg-white focus:outline-none focus:ring-2 focus:ring-mv-gold/30 sm:min-h-0 sm:text-sm";
+
 export default function ContactForm() {
   const [status, setStatus] = useState<Status>("idle");
   const [errorMessage, setErrorMessage] = useState("");
@@ -57,22 +60,22 @@ export default function ContactForm() {
 
   if (status === "success") {
     return (
-      <div className="card flex flex-col items-center gap-3 border-service-green/30 bg-service-green/5 py-12 text-center">
-        <svg viewBox="0 0 48 48" className="h-12 w-12 text-service-green">
-          <circle cx="24" cy="24" r="22" fill="currentColor" opacity="0.12" />
-          <path
-            d="M15 24.5 21 30l12-13"
-            stroke="currentColor"
-            strokeWidth="3"
-            fill="none"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        </svg>
-        <h3 className="text-xl font-bold text-service-green-dark">
+      <div className="flex flex-col items-center justify-center gap-4 rounded-3xl bg-white px-6 py-16 text-center font-manrope shadow-[0_30px_60px_-30px_rgba(0,0,0,0.5)]">
+        <span className="flex h-16 w-16 items-center justify-center rounded-full bg-mv-gold-bright text-mv-green-deep">
+          <svg viewBox="0 0 24 24" className="h-7 w-7" fill="none">
+            <path
+              d="M5 12.5 10 17l9-10"
+              stroke="currentColor"
+              strokeWidth="2.2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+        </span>
+        <h3 className="text-[22px] font-extrabold tracking-[-0.02em] text-mv-green">
           Bedankt voor uw aanvraag!
         </h3>
-        <p className="max-w-sm text-sm text-service-green-dark/70">
+        <p className="max-w-sm text-[15px] leading-[1.7] text-mv-green/70">
           We hebben uw vraag ontvangen en nemen zo snel mogelijk contact met
           u op, meestal binnen één werkdag.
         </p>
@@ -81,7 +84,10 @@ export default function ContactForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="card grid gap-4">
+    <form
+      onSubmit={handleSubmit}
+      className="grid gap-4 rounded-3xl bg-white p-5 font-manrope shadow-[0_30px_60px_-30px_rgba(0,0,0,0.5)] sm:p-9"
+    >
       {/* Honeypot veld, verborgen voor mensen */}
       <input
         type="text"
@@ -91,6 +97,15 @@ export default function ContactForm() {
         className="hidden"
         aria-hidden="true"
       />
+
+      <div className="mb-1">
+        <p className="text-[20px] font-extrabold tracking-[-0.02em] text-mv-green">
+          Offerte aanvragen
+        </p>
+        <p className="mt-1 text-[14px] text-mv-green/60">
+          Vrijblijvend en binnen één werkdag reactie.
+        </p>
+      </div>
 
       <div className="grid gap-4 sm:grid-cols-2">
         <Field label="Naam" name="name" required autoComplete="name" />
@@ -111,27 +126,31 @@ export default function ContactForm() {
         name="location"
         placeholder="Bijv. kantoor in Den Haag, 40 medewerkers"
       />
-      <label className="grid gap-1.5 text-sm font-semibold text-service-green-dark">
+      <label className="grid gap-1.5 text-[13px] font-bold text-mv-green">
         Uw vraag of situatie
         <textarea
           name="message"
           required
           rows={4}
           placeholder="Vertel ons kort over de locatie en waar u naar op zoek bent..."
-          className="rounded-xl border border-service-green/20 bg-off-white/60 px-4 py-3 text-sm font-normal text-service-green-dark placeholder:text-service-green-dark/40 focus:border-service-green focus:outline-none focus:ring-2 focus:ring-service-green/30"
+          className={`${inputClass} py-3`}
         />
       </label>
 
       {status === "error" && (
-        <p className="rounded-lg bg-marjani-red/10 px-4 py-2 text-sm font-medium text-marjani-red">
+        <p className="rounded-xl bg-marjani-red/10 px-4 py-2.5 text-sm font-medium text-marjani-red">
           {errorMessage}
         </p>
       )}
 
-      <button type="submit" disabled={status === "loading"} className="btn-primary mt-2 w-full sm:w-auto">
+      <button
+        type="submit"
+        disabled={status === "loading"}
+        className="mt-2 inline-flex h-[52px] w-full items-center justify-center rounded-xl bg-mv-gold-bright px-8 text-[14px] font-extrabold uppercase tracking-wide text-mv-green-deep transition-all hover:-translate-y-0.5 hover:shadow-[0_10px_24px_rgba(232,190,63,0.3)] disabled:opacity-60"
+      >
         {status === "loading" ? "Versturen..." : "Vraag offerte aan"}
       </button>
-      <p className="text-xs text-service-green-dark/50">
+      <p className="text-[12px] leading-relaxed text-mv-green/50">
         Door te versturen gaat u akkoord dat wij per e-mail of telefoon
         contact met u opnemen over uw aanvraag.
       </p>
@@ -155,16 +174,18 @@ function Field({
   placeholder?: string;
 }) {
   return (
-    <label className="grid gap-1.5 text-sm font-semibold text-service-green-dark">
-      {label}
-      {required && <span className="text-marjani-red"> *</span>}
+    <label className="grid gap-1.5 text-[13px] font-bold text-mv-green">
+      <span>
+        {label}
+        {required && <span className="text-mv-gold"> *</span>}
+      </span>
       <input
         type={type}
         name={name}
         required={required}
         autoComplete={autoComplete}
         placeholder={placeholder}
-        className="rounded-xl border border-service-green/20 bg-off-white/60 px-4 py-2.5 text-sm font-normal text-service-green-dark placeholder:text-service-green-dark/40 focus:border-service-green focus:outline-none focus:ring-2 focus:ring-service-green/30"
+        className={inputClass}
       />
     </label>
   );

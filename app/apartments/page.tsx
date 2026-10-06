@@ -27,7 +27,7 @@ const stays = [
   {
     title: "Short stay",
     description:
-      "Van een paar nachten tot enkele weken &mdash; ideaal voor een korte werkperiode, verhuizing of vakantie.",
+      "Van een paar nachten tot enkele weken — ideaal voor een korte werkperiode, verhuizing of vakantie.",
   },
   {
     title: "Langer verblijf",
@@ -47,7 +47,7 @@ export default function ApartmentsPage() {
       <Header active="apartments" />
 
       {/* HERO */}
-      <section className="relative overflow-hidden bg-service-green-dark text-off-white">
+      <section className="relative overflow-hidden bg-service-green-dark pt-28 text-off-white sm:pt-32">
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_10%,rgba(232,197,71,0.14),transparent_55%),radial-gradient(circle_at_85%_85%,rgba(166,38,33,0.18),transparent_50%)]" />
         <div className="section relative grid items-center gap-12 py-16 sm:py-24 lg:grid-cols-2">
           <div>

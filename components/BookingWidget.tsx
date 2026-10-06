@@ -38,7 +38,7 @@ function MonthGrid({ year, month }: { year: number; month: number }) {
   today.setHours(0, 0, 0, 0);
 
   return (
-    <div className="rounded-2xl border border-service-green/15 bg-white p-4 shadow-card">
+    <div className="rounded-3xl border border-mv-green/10 bg-white p-4 shadow-card sm:p-5">
       <p className="mb-3 text-center font-heading text-sm font-bold uppercase tracking-wide text-service-green-dark">
         {MONTH_NAMES[month]} {year}
       </p>
@@ -60,8 +60,8 @@ function MonthGrid({ year, month }: { year: number; month: number }) {
                 isPast
                   ? "text-service-green-dark/25"
                   : booked
-                  ? "bg-marjani-red/15 text-marjani-red"
-                  : "bg-service-green/10 text-service-green-dark"
+                  ? "bg-mv-green/5 text-mv-green/30 line-through"
+                  : "bg-mv-gold/15 text-mv-green"
               }`}
             >
               {date.getDate()}
@@ -133,10 +133,10 @@ export default function BookingWidget() {
       <div>
         <div className="mb-4 flex flex-wrap items-center gap-4 text-xs font-semibold text-service-green-dark/70">
           <span className="flex items-center gap-1.5">
-            <span className="h-3 w-3 rounded-sm bg-service-green/10" /> Beschikbaar
+            <span className="h-3 w-3 rounded-sm bg-mv-gold/15" /> Beschikbaar
           </span>
           <span className="flex items-center gap-1.5">
-            <span className="h-3 w-3 rounded-sm bg-marjani-red/15" /> Bezet
+            <span className="h-3 w-3 rounded-sm bg-mv-green/5" /> Bezet
           </span>
         </div>
         <div className="grid gap-4 sm:grid-cols-2">
@@ -175,7 +175,7 @@ export default function BookingWidget() {
           </p>
         </div>
       ) : (
-        <form onSubmit={handleSubmit} className="card grid gap-4">
+        <form onSubmit={handleSubmit} className="card grid gap-4 rounded-3xl border-mv-green/10 p-5 sm:p-8">
           <input
             type="text"
             name="website"
@@ -193,7 +193,7 @@ export default function BookingWidget() {
                 name="checkIn"
                 required
                 min={todayIso}
-                className="rounded-xl border border-service-green/20 bg-off-white/60 px-4 py-2.5 text-sm font-normal text-service-green-dark focus:border-service-green focus:outline-none focus:ring-2 focus:ring-service-green/30"
+                className="min-h-12 rounded-xl border border-mv-green/15 bg-mv-cream/60 px-4 py-2.5 text-base font-normal text-mv-green focus:border-mv-gold focus:outline-none focus:ring-2 focus:ring-mv-gold/30 sm:min-h-0 sm:text-sm"
               />
             </label>
             <label className="grid gap-1.5 text-sm font-semibold text-service-green-dark">
@@ -203,7 +203,7 @@ export default function BookingWidget() {
                 name="checkOut"
                 required
                 min={todayIso}
-                className="rounded-xl border border-service-green/20 bg-off-white/60 px-4 py-2.5 text-sm font-normal text-service-green-dark focus:border-service-green focus:outline-none focus:ring-2 focus:ring-service-green/30"
+                className="min-h-12 rounded-xl border border-mv-green/15 bg-mv-cream/60 px-4 py-2.5 text-base font-normal text-mv-green focus:border-mv-gold focus:outline-none focus:ring-2 focus:ring-mv-gold/30 sm:min-h-0 sm:text-sm"
               />
             </label>
           </div>
@@ -216,7 +216,7 @@ export default function BookingWidget() {
               min={1}
               max={12}
               defaultValue={2}
-              className="rounded-xl border border-service-green/20 bg-off-white/60 px-4 py-2.5 text-sm font-normal text-service-green-dark focus:border-service-green focus:outline-none focus:ring-2 focus:ring-service-green/30"
+              className="min-h-12 rounded-xl border border-mv-green/15 bg-mv-cream/60 px-4 py-2.5 text-base font-normal text-mv-green focus:border-mv-gold focus:outline-none focus:ring-2 focus:ring-mv-gold/30 sm:min-h-0 sm:text-sm"
             />
           </label>
 
@@ -228,7 +228,7 @@ export default function BookingWidget() {
                 name="name"
                 required
                 autoComplete="name"
-                className="rounded-xl border border-service-green/20 bg-off-white/60 px-4 py-2.5 text-sm font-normal text-service-green-dark focus:border-service-green focus:outline-none focus:ring-2 focus:ring-service-green/30"
+                className="min-h-12 rounded-xl border border-mv-green/15 bg-mv-cream/60 px-4 py-2.5 text-base font-normal text-mv-green focus:border-mv-gold focus:outline-none focus:ring-2 focus:ring-mv-gold/30 sm:min-h-0 sm:text-sm"
               />
             </label>
             <label className="grid gap-1.5 text-sm font-semibold text-service-green-dark">
@@ -238,7 +238,7 @@ export default function BookingWidget() {
                 name="email"
                 required
                 autoComplete="email"
-                className="rounded-xl border border-service-green/20 bg-off-white/60 px-4 py-2.5 text-sm font-normal text-service-green-dark focus:border-service-green focus:outline-none focus:ring-2 focus:ring-service-green/30"
+                className="min-h-12 rounded-xl border border-mv-green/15 bg-mv-cream/60 px-4 py-2.5 text-base font-normal text-mv-green focus:border-mv-gold focus:outline-none focus:ring-2 focus:ring-mv-gold/30 sm:min-h-0 sm:text-sm"
               />
             </label>
           </div>
@@ -249,7 +249,7 @@ export default function BookingWidget() {
               type="tel"
               name="phone"
               autoComplete="tel"
-              className="rounded-xl border border-service-green/20 bg-off-white/60 px-4 py-2.5 text-sm font-normal text-service-green-dark focus:border-service-green focus:outline-none focus:ring-2 focus:ring-service-green/30"
+              className="min-h-12 rounded-xl border border-mv-green/15 bg-mv-cream/60 px-4 py-2.5 text-base font-normal text-mv-green focus:border-mv-gold focus:outline-none focus:ring-2 focus:ring-mv-gold/30 sm:min-h-0 sm:text-sm"
             />
           </label>
 
@@ -259,7 +259,7 @@ export default function BookingWidget() {
               name="message"
               rows={3}
               placeholder="Bijv. laat aankomst, huisdier, extra vragen..."
-              className="rounded-xl border border-service-green/20 bg-off-white/60 px-4 py-3 text-sm font-normal text-service-green-dark placeholder:text-service-green-dark/40 focus:border-service-green focus:outline-none focus:ring-2 focus:ring-service-green/30"
+              className="rounded-xl border border-mv-green/15 bg-mv-cream/60 px-4 py-3 text-base font-normal text-mv-green placeholder:text-mv-green/40 focus:border-mv-gold focus:outline-none focus:ring-2 focus:ring-mv-gold/30 sm:text-sm"
             />
           </label>
 
@@ -269,7 +269,7 @@ export default function BookingWidget() {
             </p>
           )}
 
-          <button type="submit" disabled={status === "loading"} className="btn-primary mt-2 w-full">
+          <button type="submit" disabled={status === "loading"} className="mt-2 inline-flex h-[52px] w-full items-center justify-center rounded-full bg-mv-green px-8 text-[13px] font-extrabold uppercase tracking-[0.14em] text-mv-gold-bright transition-all hover:-translate-y-0.5 hover:bg-mv-green-secondary disabled:opacity-60">
             {status === "loading" ? "Versturen..." : "Vraag beschikbaarheid aan"}
           </button>
         </form>
